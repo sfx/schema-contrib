@@ -5,86 +5,82 @@
             [instaparse.core :as instaparse]
             [schema.core :as schema]))
 
-;; TODO: Update to Clojure 1.6.0.
-;; TODO: Case sensitive instaparsing? See instaparse tests.
+(ns-unmap *ns* 'java.nio.file.Path)
 
 ;; ISO 3166-1 alpha-2 country codes
 (def ^{:private true} countries
-  (->> (Locale/getISOCountries)
-       (map string/lower-case)
-       (apply hash-set)))
+  (apply hash-set (Locale/getISOCountries)))
 
 (defn- countries-contains?
   [c]
-  (contains? countries c))
+  (contains? countries (string/upper-case c)))
 
 (def Country
   (schema/pred countries-contains?))
 
 (def ^{:private true} countries-keywords
   (->> (Locale/getISOCountries)
-       (map string/lower-case)
        (map keyword)
        (apply hash-set)))
 
 (defn- countries-keywords-contains?
   [ck]
-  (contains? countries-keywords ck))
+  (contains?
+    countries-keywords
+    (-> ck
+        name
+        string/upper-case
+        keyword)))
 
 (def Country-Keyword
   (schema/pred countries-keywords-contains?))
 
-(def email-address-parser
-  (instaparse/parser
-    (io/resource "email_address.abnf")
-    :input-format :abnf))
-
-(defn email-address?
-  [e]
-  (let [parse-result (email-address-parser e)]
-    (if-not (instaparse/failure? parse-result)
-      true
-      false)))
-
-(def Email-Address
-  (schema/pred email-address?))
-
 (def ^{:private true} languages
-  (->> (Locale/getISOLanguages)
-       (map string/lower-case)
-       (apply hash-set)))
+  (apply hash-set (Locale/getISOLanguages)))
 
 (defn- languages-contains?
   [l]
-  (contains? languages l))
+  (contains? languages (string/lower-case l)))
 
 (def Language
   (schema/pred languages-contains?))
 
 (def ^{:private true} languages-keywords
   (->> (Locale/getISOLanguages)
-       (map string/lower-case)
        (map keyword)
        (apply hash-set)))
 
 (defn- languages-keywords-contains?
   [lk]
-  (contains? languages-keywords lk))
+  (contains?
+    languages-keywords
+    (-> lk
+        name
+        string/lower-case
+        keyword)))
 
 (def Language-Keyword
   (schema/pred languages-keywords-contains?))
 
-(def uri-parser
+(def ^{:private true} uri-parser
   (instaparse/parser
     (io/resource "uri.abnf")
     :input-format :abnf))
 
-(defn uri?
+(defn- path?
+  [p]
+  (let [parse-result (uri-parser p :start :path)]
+    (not (instaparse/failure? parse-result))))
+
+(def Path
+  (schema/pred path?))
+
+(defn- uri?
   [u]
-  (let [parse-result (uri-parser u)]
-    (if-not (instaparse/failure? parse-result)
-      true
-      false)))
+  (-> u
+      uri-parser
+      instaparse/failure?
+      not))
 
 (def URI
   (schema/pred uri?))

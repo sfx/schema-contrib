@@ -34,8 +34,9 @@
   (is (thrown? ExceptionInfo (schema/validate Language-Keyword :asdf))))
 
 (deftest uri-test
-  (is (= "../asdf" (schema/validate URI "../asdf")))
-  (is (= "/asdf" (schema/validate URI "/asdf")))
-  (is (= "http://www.google.com"
-         (schema/validate URI "http://www.google.com")))
-  (is (= "asdf" (schema/validate URI "asdf"))))
+  (is (= "http://www.sfxii.com"
+         (schema/validate URI "http://www.sfxii.com")))
+  (is (thrown? ExceptionInfo (schema/validate URI "asdf"))))
+
+(deftest path-test
+  (is (= "/this/is/a/path" (schema/validate Path "/this/is/a/path"))))
