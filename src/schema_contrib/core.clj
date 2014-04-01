@@ -35,6 +35,21 @@
 (def Country-Keyword
   (schema/pred countries-keywords-contains?))
 
+(def ^{:private true} email-parser
+  (instaparse/parser
+    (io/resource "email.abnf")
+    :input-format :abnf))
+
+(defn- email?
+  [e]
+  (let [parse-result (email-parser e)]
+    (if-not (instaparse/failure? parse-result)
+      true
+      false)))
+
+(def Email
+  (schema/pred email?))
+
 (def ^{:private true} languages
   (apply hash-set (Locale/getISOLanguages)))
 
@@ -52,12 +67,14 @@
 
 (defn- languages-keywords-contains?
   [lk]
-  (contains?
-    languages-keywords
-    (-> lk
-        name
-        string/lower-case
-        keyword)))
+  (if (keyword? lk)
+    (contains?
+      languages-keywords
+      (-> lk
+          name
+          string/lower-case
+          keyword))
+    false))
 
 (def Language-Keyword
   (schema/pred languages-keywords-contains?))

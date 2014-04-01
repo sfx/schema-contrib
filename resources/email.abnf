@@ -15,16 +15,16 @@ dtext           =   %d33-90 /         ; Printable US-ASCII
 ; http://tools.ietf.org/html/rfc5322#section-3.2.3
 
 atext           =   ALPHA / DIGIT /    ; Printable US-ASCII
-                   "!" / "#" /        ;  characters not including
-                   "$" / "%" /        ;  specials.  Used for atoms.
-                   "&" / "'" /
-                   "*" / "+" /
-                   "-" / "/" /
-                   "=" / "?" /
-                   "^" / "_" /
-                   "`" / "{" /
-                   "|" / "}" /
-                   "~"
+                    "!" / "#" /        ;  characters not including
+                    "$" / "%" /        ;  specials.  Used for atoms.
+                    "&" / "'" /
+                    "*" / "+" /
+                    "-" / "/" /
+                    "=" / "?" /
+                    "^" / "_" /
+                    "`" / "{" /
+                    "|" / "}" /
+                    "~"
 
 atom            =   [CFWS] 1*atext [CFWS]
 
@@ -297,12 +297,13 @@ ftext           =   %d33-57 /          ; Printable US-ASCII
                                        ;  ":".
 
 ; http://tools.ietf.org/html/rfc5322#section-3.6.6
+; https://tools.ietf.org/html/rfc6854#section-2.2
 
 resent-date     =   "Resent-Date:" date-time CRLF
 
-resent-from     =   "Resent-From:" mailbox-list CRLF
+resent-from = "Resent-From:" (mailbox-list / address-list) CRLF
 
-resent-sender   =   "Resent-Sender:" mailbox CRLF
+resent-sender = "Resent-Sender:" (mailbox / address) CRLF
 
 resent-to       =   "Resent-To:" address-list CRLF
 
@@ -344,13 +345,13 @@ obs-id-right    =   domain
 
 orig-date       =   "Date:" date-time CRLF
 
-; http://tools.ietf.org/html/rfc5322#section-3.6.2
+; https://tools.ietf.org/html/rfc6854#section-2.1
 
-from            =   "From:" mailbox-list CRLF
+from = "From:" (mailbox-list / address-list) CRLF
 
-sender          =   "Sender:" mailbox CRLF
+sender = "Sender:" (mailbox / address) CRLF
 
-reply-to        =   "Reply-To:" address-list CRLF
+reply-to = "Reply-To:" address-list CRLF
 
 ; http://tools.ietf.org/html/rfc5322#section-3.6.3
 
