@@ -7,23 +7,24 @@
 
 (ns-unmap *ns* 'java.nio.file.Path)
 
-;; ISO 3166-1 alpha-2 country codes
-(def ^{:private true} countries
+;; Country (ISO 3166-1 alpha-2 country codes)
+
+(def countries
   (apply hash-set (Locale/getISOCountries)))
 
-(defn- countries-contains?
+(defn countries-contains?
   [c]
   (contains? countries (string/upper-case c)))
 
 (def Country
   (schema/pred countries-contains?))
 
-(def ^{:private true} countries-keywords
+(def countries-keywords
   (->> (Locale/getISOCountries)
        (map keyword)
        (apply hash-set)))
 
-(defn- countries-keywords-contains?
+(defn countries-keywords-contains?
   [ck]
   (contains?
     countries-keywords
@@ -35,12 +36,45 @@
 (def Country-Keyword
   (schema/pred countries-keywords-contains?))
 
-(def ^{:private true} email-parser
+;; Date (ISO 8601)
+
+(def date-parser
+  (instaparse/parser
+    (io/resource "date.abnf")
+    :input-format :abnf))
+
+(defn date?
+  [d]
+  (let [parse-result (date-parser d :start :date)]
+    (not (instaparse/failure? parse-result))))
+
+(def Date
+  (schema/pred date?))
+
+(defn iso-date-time?
+  [i]
+  (let [parse-result (date-parser i :start :iso-date-time)]
+    (not (instaparse/failure? parse-result))))
+
+(def ISO-Date-Time
+  (schema/pred iso-date-time?))
+
+(defn time?
+  [t]
+  (let [parse-result (date-parser t :start :time)]
+    (not (instaparse/failure? parse-result))))
+
+(def Time
+  (schema/pred time?))
+
+;; Email
+
+(def email-parser
   (instaparse/parser
     (io/resource "email.abnf")
     :input-format :abnf))
 
-(defn- email?
+(defn email?
   [e]
   (let [parse-result (email-parser e)]
     (if-not (instaparse/failure? parse-result)
@@ -50,22 +84,24 @@
 (def Email
   (schema/pred email?))
 
-(def ^{:private true} languages
+;; Language
+
+(def languages
   (apply hash-set (Locale/getISOLanguages)))
 
-(defn- languages-contains?
+(defn languages-contains?
   [l]
   (contains? languages (string/lower-case l)))
 
 (def Language
   (schema/pred languages-contains?))
 
-(def ^{:private true} languages-keywords
+(def languages-keywords
   (->> (Locale/getISOLanguages)
        (map keyword)
        (apply hash-set)))
 
-(defn- languages-keywords-contains?
+(defn languages-keywords-contains?
   [lk]
   (if (keyword? lk)
     (contains?
@@ -79,12 +115,22 @@
 (def Language-Keyword
   (schema/pred languages-keywords-contains?))
 
-(def ^{:private true} uri-parser
+;; URI
+
+(def uri-parser
   (instaparse/parser
     (io/resource "uri.abnf")
     :input-format :abnf))
 
-(defn- path?
+(defn absolute-uri?
+  [a]
+  (let [parse-result (uri-parser a :start :absolute-URI)]
+    (not (instaparse/failure? parse-result))))
+
+(def Absolute-URI
+  (schema/pred absolute-uri?))
+
+(defn path?
   [p]
   (let [parse-result (uri-parser p :start :path)]
     (not (instaparse/failure? parse-result))))
@@ -92,7 +138,15 @@
 (def Path
   (schema/pred path?))
 
-(defn- uri?
+(defn relative-ref?
+  [r]
+  (let [parse-result (uri-parser r :start :relative-ref)]
+    (not (instaparse/failure? parse-result))))
+
+(def Relative-Ref
+  (schema/pred relative-ref?))
+
+(defn uri?
   [u]
   (-> u
       uri-parser

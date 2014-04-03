@@ -1,16 +1,13 @@
 (ns schema-contrib.core-test
-  (:import (clojure.lang ExceptionInfo)
-           (java.util Locale))
+  (:import (clojure.lang ExceptionInfo))
   (:require [clojure.string :as string]
             [clojure.test :refer :all]
             [clojure.test.check.generators :as gen]
             [schema.core :as schema]
-            [schema-contrib.core :refer :all]))
+            [schema-contrib.core :refer :all]
+            [schema-contrib.gen :refer :all]))
 
 ;; Country
-
-(def country-gen
-  (gen/elements (Locale/getISOCountries)))
 
 (deftest country-test
   (testing "Generated countries pass validation."
@@ -23,11 +20,6 @@
 
 ;; Country-Keyword
 
-(def country-keyword-gen
-  (->> (Locale/getISOCountries)
-       (map keyword)
-       gen/elements))
-
 (deftest country-keyword-test
   (testing "Generated country keywords pass validation."
     (->> (gen/sample country-keyword-gen 100)
@@ -38,26 +30,13 @@
 
 ;; Email
 
-; http://git.io/-cB3Fg
-(def email-gen
-  (gen/fmap (fn [[name domain tld]]
-              (if-not (string/blank? domain) ;; Support TLDs with no domain.
-                (str name "@" domain "." tld)
-                (str name "@" tld)))
-            (gen/tuple
-              (gen/not-empty gen/string-alpha-numeric)
-              gen/string-alpha-numeric
-              (gen/elements ["biz" "com" "io" "net" "org"]))))
+(defn invalid-email)
 
-(defn- valid-email
+(defn valid-email
   [email]
   (= email (schema/validate Email email)))
 
 (deftest email-test
-  (testing "Generated email addresses pass validation."
-    (->> (gen/sample email-gen 100)
-         (map #(is (valid-email %)))
-         (doall)))
   (testing "Wikipedia email addresses validate as advertised."
     ;; http://en.wikipedia.org/wiki/Email_address#Examples
     (is (valid-email "niceandsimple@example.com"))
@@ -77,7 +56,7 @@
     (is (valid-email "\" \"@example.org"))
     ;(is (valid "üñîçøðé@example.com"))
     ;(is (valid "üñîçøðé@üñîçøðé.com"))
-    (is (thrown? ExceptionInfo (schema/validate Email "Abc.example.com")))
+    (is (invalid-email ExceptionInfo (schema/validate Email "Abc.example.com")))
     (is (thrown? ExceptionInfo (schema/validate Email "A@b@c@example.com")))
     (is (thrown?
           ExceptionInfo
@@ -96,9 +75,6 @@
 
 ;; Language
 
-(def language-gen
-  (gen/elements (Locale/getISOLanguages)))
-
 (deftest language-test
   (testing "Generated languages pass validation."
     (->> (gen/sample language-gen 100)
@@ -110,11 +86,6 @@
 
 ;; Language-Keyword
 
-(def language-keyword-gen
-  (->> (Locale/getISOLanguages)
-       (map keyword)
-       gen/elements))
-
 (deftest language-keyword-test
   (testing "Generated languages pass validation."
     (->> (gen/sample language-keyword-gen 100)
@@ -125,19 +96,6 @@
 
 ;; Path
 
-(def path-gen
-  (gen/fmap (fn [[path1 path2 path3 path4]]
-              (cond (string/blank? path1) path1
-                    (string/blank? path2) path1
-                    (string/blank? path3) (str path1 "/" path2)
-                    (string/blank? path4) (str path1 "/" path2 "/" path3)
-                    :else (str path1 "/" path2 "/" path3 "/" path4)))
-            (gen/tuple
-              gen/string-alpha-numeric
-              gen/string-alpha-numeric
-              gen/string-alpha-numeric
-              gen/string-alpha-numeric)))
-
 (deftest path-test
   (testing "Generated paths pass validation."
     (->> (gen/sample path-gen 100)
@@ -145,18 +103,6 @@
          (doall))))
 
 ;; URI
-
-(def uri-gen
-  (gen/fmap (fn [[protocol subdomain domain tld path]]
-              (str protocol "://"
-                   (when-not (string/blank? subdomain) (str subdomain "."))
-                   domain "." tld "/" path))
-            (gen/tuple
-              (gen/elements ["ftp" "http" "https"])
-              gen/string-alpha-numeric
-              (gen/not-empty gen/string-alpha-numeric)
-              (gen/elements ["biz" "com" "io" "net" "org"])
-              path-gen)))
 
 (deftest uri-test
   (testing "Generated URIs pass validation."
