@@ -82,10 +82,10 @@
 
 (defn email?
   [e]
-  (let [parse-result (email-parser e)]
-    (if-not (instaparse/failure? parse-result)
-      true
-      false)))
+  (-> e
+      email-parser
+      instaparse/failure?
+      not))
 
 (def Email
   (schema/pred email?))
