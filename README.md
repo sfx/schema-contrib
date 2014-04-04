@@ -5,7 +5,7 @@ Additional validators for [Prismatic's Schema]
 
 ## Clojars
 
-```clj
+```clojure
 [schema-contrib "0.1.0"]
 ```
 
@@ -13,7 +13,7 @@ Additional validators for [Prismatic's Schema]
 
 ### Schema
 
-```clj
+```clojure
 (ns my-ns
   (:require [schema.core :as s]
             [schema-contrib.core :as sc]))
@@ -48,7 +48,7 @@ If you're generating your schema with [test.check]
 (https://github.com/MichaelBlume/schema-gen), we have some generators, and are
 working on more.
 
-```clj
+```clojure
 (ns my-ns
   (:require [clojure.test.check.generators :as gen]
             [schema-contrib.gen :as scgen]))

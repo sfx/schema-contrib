@@ -122,30 +122,6 @@
     (io/resource "uri.abnf")
     :input-format :abnf))
 
-(defn absolute-uri?
-  [a]
-  (let [parse-result (uri-parser a :start :absolute-URI)]
-    (not (instaparse/failure? parse-result))))
-
-(def Absolute-URI
-  (schema/pred absolute-uri?))
-
-(defn path?
-  [p]
-  (let [parse-result (uri-parser p :start :path)]
-    (not (instaparse/failure? parse-result))))
-
-(def Path
-  (schema/pred path?))
-
-(defn relative-ref?
-  [r]
-  (let [parse-result (uri-parser r :start :relative-ref)]
-    (not (instaparse/failure? parse-result))))
-
-(def Relative-Ref
-  (schema/pred relative-ref?))
-
 (defn uri?
   [u]
   (-> u
@@ -155,3 +131,11 @@
 
 (def URI
   (schema/pred uri?))
+
+(defn uri-reference?
+  [u]
+  (let [parse-result (uri-parser u :start :URI-reference)]
+    (not (instaparse/failure? parse-result))))
+
+(def URI-Reference
+  (schema/pred uri-reference?))
