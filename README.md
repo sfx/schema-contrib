@@ -18,8 +18,6 @@ Additional validators for [Prismatic's Schema]
   (:require [schema.core :as s]
             [schema-contrib.core :as sc]))
 
-(s/validate sc/Absolute-URI "https://sfx.recruiterbox.com/")
-
 (s/validate sc/Country "us")
 
 (s/validate sc/Country-Keyword :us)
@@ -34,11 +32,11 @@ Additional validators for [Prismatic's Schema]
 
 (s/validate sc/ISO-Date-Time "2014-04-01T20:17:35+00:00")
 
-(s/validate sc/Path "/dev/null")
-
 (s/validate sc/Time "05:00")
 
 (s/validate sc/URI "https://www.eff.org")
+
+(s/validate sc/URI-Reference "relative/path/to/resource.txt")
 ```
 
 ### Generators
