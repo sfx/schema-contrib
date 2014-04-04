@@ -5,8 +5,6 @@
             [instaparse.core :as instaparse]
             [schema.core :as schema]))
 
-(ns-unmap *ns* 'java.nio.file.Path)
-
 ;; Country (ISO 3166-1 alpha-2 country codes)
 
 (def countries
