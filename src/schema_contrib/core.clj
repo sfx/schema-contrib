@@ -45,24 +45,30 @@
 
 (defn date?
   [d]
-  (let [parse-result (date-parser d :start :date)]
-    (not (instaparse/failure? parse-result))))
+  (-> d
+      (date-parser :start :date)
+      instaparse/failure?
+      not))
 
 (def Date
   (schema/pred date?))
 
 (defn iso-date-time?
   [i]
-  (let [parse-result (date-parser i :start :iso-date-time)]
-    (not (instaparse/failure? parse-result))))
+  (-> i
+      (date-parser :start :iso-date-time)
+      instaparse/failure?
+      not))
 
 (def ISO-Date-Time
   (schema/pred iso-date-time?))
 
 (defn time?
   [t]
-  (let [parse-result (date-parser t :start :time)]
-    (not (instaparse/failure? parse-result))))
+  (-> t
+      (date-parser :start :time)
+      instaparse/failure?
+      not))
 
 (def Time
   (schema/pred time?))
@@ -134,8 +140,10 @@
 
 (defn uri-reference?
   [u]
-  (let [parse-result (uri-parser u :start :URI-reference)]
-    (not (instaparse/failure? parse-result))))
+  (-> u
+      (uri-parser :start :URI-reference)
+      instaparse/failure?
+      not))
 
 (def URI-Reference
   (schema/pred uri-reference?))
