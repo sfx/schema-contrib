@@ -6,7 +6,7 @@ Additional validators for [Prismatic's Schema]
 ## Clojars
 
 ```clojure
-[schema-contrib "0.1.1"]
+[schema-contrib "0.1.2"]
 ```
 
 ## Usage
@@ -59,6 +59,12 @@ working on more.
 
 (gen/sample scgen/language-keyword 5) ; => (:cr :hu :ak :ki :mk)
 ```
+
+## TODO
+
+* More validators
+* More Unicode email validation support
+* ClojureScript support
 
 ## License
 

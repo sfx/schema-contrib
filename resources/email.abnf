@@ -426,3 +426,13 @@ obs-resent-rply =   "Resent-Reply-To" *WSP ":" address-list CRLF
 ; http://tools.ietf.org/html/rfc5322#section-4.5.8
 
 obs-optional    =   field-name *WSP ":" unstructured CRLF
+
+; http://tools.ietf.org/html/rfc6531#section-3.3
+; http://www.utf8-chartable.de/unicode-utf8-table.pl
+UTF8-non-ascii  = %x80-FF / ; Latin-1 Supplement
+                  %x100-17F / ; Latin Extended-A
+                  %x370-3FF / ; Greek and Coptic
+                  %x400-4FF / ; Cyrillic
+                  %x500-52F / ; Cyrillic Supplement
+                  %x4E00-9FFF ; CJK Unified Ideographs
+atext =/ UTF8-non-ascii

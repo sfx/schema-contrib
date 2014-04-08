@@ -43,7 +43,7 @@
   (is (invalid Date "2014-04-01T20:17:35Z")))
 
 (deftest email-test
-  (testing "http://en.wikipedia.org/wiki/Email_address#Examples"
+  (testing "http://en.wikipedia.org/wiki/Email_address"
     (is (valid Email "niceandsimple@example.com"))
     (is (valid Email "very.common@example.com"))
     (is (valid Email "a.little.lengthy.but.fine@dept.example.com"))
@@ -59,16 +59,18 @@
     (is (valid Email "!#$%&'*+-/=?^_`{}|~@example.org"))
     (is (valid Email "\"()<>[]:,;@\\\"!#$%&'*+-/=?^_`{}| ~.a\"@example.org"))
     (is (valid Email "\" \"@example.org"))
-    ;(is (valid Email "üñîçøðé@example.com"))
-    ;(is (valid Email "üñîçøðé@üñîçøðé.com"))
+    (is (valid Email "üñîçøðé@example.com"))
+    (is (valid Email "üñîçøðé@üñîçøðé.com"))
+    (is (valid Email "Pelé@example.com"))
+    (is (valid Email "δοκιμή@παράδειγμα.δοκιμή"))
+    (is (valid Email "甲斐@黒川.日本"))
+    (is (valid Email "чебурашка@ящик-с-апельсинами.рф"))
     (is (invalid Email "Abc.example.com"))
     (is (invalid Email "A@b@c@example.com"))
     (is (invalid Email "a\"b(c)d,e:f;g<h>i[j\\k]l@example.com"))
     (is (invalid Email "just\"not\"right@example.com"))
     (is (invalid Email "this is\"not\\allowed@example.com"))
-    (is (invalid Email "this\\ still\\\"not\\\\allowed@example.com"))
-    ;(is (invalid Email "email@brazil.b")))
-    ))
+    (is (invalid Email "this\\ still\\\"not\\\\allowed@example.com"))))
 
 (deftest language-test
   (testing "Generated languages pass validation."
