@@ -6,7 +6,7 @@ Additional validators for [Prismatic's Schema]
 ## Clojars
 
 ```clojure
-[schema-contrib "0.1.2"]
+[schema-contrib "0.1.3"]
 ```
 
 ## Usage

@@ -15,7 +15,7 @@
   (contains? countries (string/upper-case c)))
 
 (def Country
-  (schema/pred countries-contains?))
+  (schema/pred countries-contains? 'Country))
 
 (def countries-keywords
   (->> (Locale/getISOCountries)
@@ -32,7 +32,7 @@
         keyword)))
 
 (def Country-Keyword
-  (schema/pred countries-keywords-contains?))
+  (schema/pred countries-keywords-contains? 'Country-Keyword))
 
 ;; Date (ISO 8601)
 
@@ -49,7 +49,7 @@
       not))
 
 (def Date
-  (schema/pred date?))
+  (schema/pred date? 'Date))
 
 (defn iso-date-time?
   [i]
@@ -59,7 +59,7 @@
       not))
 
 (def ISO-Date-Time
-  (schema/pred iso-date-time?))
+  (schema/pred iso-date-time? 'ISO-Date-Time))
 
 (defn time?
   [t]
@@ -69,7 +69,7 @@
       not))
 
 (def Time
-  (schema/pred time?))
+  (schema/pred time? 'Time))
 
 ;; Email
 
@@ -86,7 +86,7 @@
       not))
 
 (def Email
-  (schema/pred email?))
+  (schema/pred email? 'Email))
 
 ;; Language
 
@@ -98,7 +98,7 @@
   (contains? languages (string/lower-case l)))
 
 (def Language
-  (schema/pred languages-contains?))
+  (schema/pred languages-contains? 'Language))
 
 (def languages-keywords
   (->> (Locale/getISOLanguages)
@@ -117,7 +117,7 @@
     false))
 
 (def Language-Keyword
-  (schema/pred languages-keywords-contains?))
+  (schema/pred languages-keywords-contains? 'Language-Keyword))
 
 ;; URI
 
@@ -134,7 +134,7 @@
       not))
 
 (def URI
-  (schema/pred uri?))
+  (schema/pred uri? 'URI))
 
 (defn uri-reference?
   [u]
@@ -144,4 +144,4 @@
       not))
 
 (def URI-Reference
-  (schema/pred uri-reference?))
+  (schema/pred uri-reference? 'URI-Reference))
