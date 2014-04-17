@@ -3,10 +3,13 @@
 Additional validators for [Prismatic's Schema]
 (https://github.com/Prismatic/schema).
 
+[![Build Status](https://travis-ci.org/sfx/schema-contrib.svg)]
+(https://travis-ci.org/sfx/schema-contrib)
+
 ## Clojars
 
 ```clojure
-[schema-contrib "0.1.2"]
+[schema-contrib "0.1.3"]
 ```
 
 ## Usage
