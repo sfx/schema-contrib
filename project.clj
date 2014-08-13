@@ -6,5 +6,5 @@
   :dependencies [[instaparse "1.3.0"]
                  [org.clojure/clojure "1.6.0"]
                  [org.clojure/test.check "0.5.7"]
-                 [prismatic/schema "0.2.1"]]
+                 [prismatic/schema "0.2.6"]]
   :resource-paths ["resources"])
