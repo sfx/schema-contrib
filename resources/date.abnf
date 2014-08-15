@@ -56,7 +56,7 @@ time-minute       = zeroToFiftyNine ; 00-59
 time-second       = zeroToSixty ; 00-58, 00-59, 00-60 based on
                                 ; leap-second rules
 time-fraction     = ("," / ".") 1*DIGIT
-time-numoffset    = ("+" / "-") time-hour [[":"] time-minute]
+time-numoffset    = 0*1SP ("+" / "-") time-hour [[":"] time-minute]
 time-zone         = "Z" / time-numoffset
 
 timeopt-hour      = "-" / (time-hour [":"])
