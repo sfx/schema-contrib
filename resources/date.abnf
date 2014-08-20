@@ -1,13 +1,29 @@
 ; http://www.ietf.org/rfc/rfc3339.txt
+; and http://www.odata.org/documentation/odata-version-3-0/abnf/
+
+oneToNine = "01" / "02" / "03" / "04" / "05" / "06" / "07" / "08" / "09"
+zeroToNine = "00" / oneToNine
+
+oneToTwelve = oneToNine / "1" ( "0" / "1" / "2" )
+
+oneToThirteen = oneToTwelve / "13"
+
+zeroToFiftyNine = zeroToNine / ( "1" / "2" / "3" / "4" / "5" ) DIGIT
+
+zeroToSixty = zeroToNine / ( "1" / "2" / "3" / "4" / "5" ) DIGIT / "60"
+
+oneToThirtyOne = oneToNine / ( "1" / "2" ) DIGIT / "30" / "31"
+
+zeroToTwentyFour = zeroToNine / "1" DIGIT / "2" ( "0" / "1" / "2" / "3" / "4" )
 
 date-century    = 2DIGIT  ; 00-99
 date-decade     =  DIGIT  ; 0-9
 date-subdecade  =  DIGIT  ; 0-9
 date-year       = date-decade date-subdecade
 date-fullyear   = date-century date-year
-date-month      = 2DIGIT  ; 01-12
-date-wday       =  DIGIT  ; 1-7  ; 1 is Monday, 7 is Sunday
-date-mday       = 2DIGIT  ; 01-28, 01-29, 01-30, 01-31 based on
+date-month      = oneToTwelve  ; 01-12
+date-wday       = DIGIT  ; 1-7  ; 1 is Monday, 7 is Sunday
+date-mday       = oneToThirtyOne  ; 01-28, 01-29, 01-30, 01-31 based on
                          ; month/year
 date-yday       = 3DIGIT  ; 001-365, 001-366 based on year
 date-week       = 2DIGIT  ; 01-52, 01-53 based on year
@@ -35,12 +51,12 @@ date              = datespec-full / datespec-year
                    / datespec-month /
 datespec-mday / datespec-week / datespec-wday / datespec-yday
 
-time-hour         = 2DIGIT ; 00-24
-time-minute       = 2DIGIT ; 00-59
-time-second       = 2DIGIT ; 00-58, 00-59, 00-60 based on
-                          ; leap-second rules
+time-hour         = zeroToTwentyFour ; 00-24
+time-minute       = zeroToFiftyNine ; 00-59
+time-second       = zeroToSixty ; 00-58, 00-59, 00-60 based on
+                                ; leap-second rules
 time-fraction     = ("," / ".") 1*DIGIT
-time-numoffset    = ("+" / "-") time-hour [[":"] time-minute]
+time-numoffset    = 0*1SP ("+" / "-") time-hour [[":"] time-minute]
 time-zone         = "Z" / time-numoffset
 
 timeopt-hour      = "-" / (time-hour [":"])
@@ -53,7 +69,9 @@ timespec-base     = timespec-hour / timespec-minute / timespec-second
 
 time              = timespec-base [time-fraction] [time-zone]
 
-iso-date-time     = date "T" time
+date-time-sep     = "T" / SP
+
+iso-date-time     = date date-time-sep time
 
 dur-second        = 1*DIGIT "S"
 dur-minute        = 1*DIGIT "M" [dur-second]

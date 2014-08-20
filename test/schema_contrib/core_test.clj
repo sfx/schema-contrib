@@ -90,11 +90,33 @@
   (is (invalid Language-Keyword "en")))
 
 (deftest iso-date-time-test
-  (is (valid ISO-Date-Time "2014-04-01T20:17:35+00:00"))
+  (is (valid ISO-Date-Time "2014-04-01T22:17:35+02:00"))
   (is (valid ISO-Date-Time "2014-04-01T20:17:35Z"))
-  (is (valid ISO-Date-Time "2007-04-05T14:30"))
+  (is (valid ISO-Date-Time "2007-04-05T14:59"))
   (is (valid ISO-Date-Time "2007-04-05T14:30Z"))
   (is (valid ISO-Date-Time "2007-04-05T12:30-02:00"))
+
+  (is (valid ISO-Date-Time "2014-04-01 20:17:35+00:00"))
+  (is (valid ISO-Date-Time "2014-04-01 21:17:35Z"))
+  (is (valid ISO-Date-Time "2007-04-05 14:30"))
+  (is (valid ISO-Date-Time "2007-04-05 14:30Z"))
+  (is (valid ISO-Date-Time "2007-04-05 12:30-02:00"))
+
+  (is (not (valid ISO-Date-Time "2007-13-05T12:30-02:00")))
+  (is (not (valid ISO-Date-Time "2007-12-45T12:30-02:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05T25:30-02:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05T12:61-02:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05T12:30-25:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05T12:30-02:61")))
+
+  (is (not (valid ISO-Date-Time "2007-13-05 12:30-02:00")))
+  (is (not (valid ISO-Date-Time "2007-12-45 12:30-02:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05 25:30-02:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05 12:61-02:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05 12:30-25:00")))
+  (is (not (valid ISO-Date-Time "2007-01-05 12:30-02:61")))
+
+
   (is (invalid ISO-Date-Time "2014-04-01"))
   (is (invalid ISO-Date-Time "2014-W14"))
   (is (invalid ISO-Date-Time "2014-W14-2"))
@@ -134,4 +156,3 @@
 (deftest uri-reference-test
   (doall (map #(is (valid URI-Reference %)) absolute-uris))
   (doall (map #(is (valid URI-Reference %)) uri-references)))
-
