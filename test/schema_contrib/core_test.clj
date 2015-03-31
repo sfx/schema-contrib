@@ -156,3 +156,53 @@
 (deftest uri-reference-test
   (doall (map #(is (valid URI-Reference %)) absolute-uris))
   (doall (map #(is (valid URI-Reference %)) uri-references)))
+
+(deftest non-empty-string-test
+  (testing "non-empty strings validate"
+    (is (valid NonEmptyStr "stuff")))
+  (testing "empty strings fail validation"
+    (is (invalid NonEmptyStr "")))
+  (testing "non-strings fail validation"
+    (is (invalid NonEmptyStr 42))))
+
+(deftest non-negative-integer-test
+  (testing "z in Z, z > 0 should validate"
+    (is (valid NonNegInt 42)))
+  (testing "z in Z, z = 0 should validate"
+    (is (valid NonNegInt 0)))
+  (testing "z in Z, z < 0 should fail validation"
+    (is (invalid NonNegInt -42)))
+  (testing "z not in Z should fail validation"
+    (is (invalid NonNegInt 42.42))))
+
+(deftest positive-integer-test
+  (testing "z in Z, z > 0 should validate"
+    (is (valid PosInt 42)))
+  (testing "z in Z, z = 0 should fail validation"
+    (is (invalid PosInt 0)))
+  (testing "z in Z, z < 0 should fail validation"
+    (is (invalid PosInt -42)))
+  (testing "z not in Z should fail validation"
+    (is (invalid PosInt 42.42))))
+
+(deftest positive-integer-test
+  (testing "stringified z in Z, z > 0 should validate"
+    (is (valid PosIntStr "42")))
+  (testing "actual integer z in Z, z > 0 should validate"
+    (is (invalid PosIntStr 42)))
+  (testing "stringified z in Z, z = 0 should fail validation"
+    (is (invalid PosIntStr "0")))
+  (testing "stringified z in Z, z < 0 should fail validation"
+    (is (invalid PosIntStr "-42")))
+  (testing "stringified z not in Z should fail validation"
+    (is (invalid PosIntStr "42.42"))))
+
+(deftest alpha-numeric-string-test
+  (testing "lower case, upper case, and numeric digits are valid"
+    (is (valid AlphaNumericStr "abcXYZ123")))
+  (testing "whitespace is invalid"
+    (is (invalid AlphaNumericStr "abc XYZ 123")))
+  (testing "punctuation is invalid"
+    (is (invalid AlphaNumericStr "123.456")))
+  (testing "non-strings are invalid"
+    (is (invalid AlphaNumericStr 123.456))))
