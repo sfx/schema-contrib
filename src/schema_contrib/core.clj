@@ -145,3 +145,51 @@
 
 (def URI-Reference
   (schema/pred uri-reference? 'URI-Reference))
+
+(defn non-empty-string? [s]
+  (and (string? s)
+       (not (empty? s))))
+
+(def NonEmptyStr
+  "Any strings other than the empty string, \"\"."
+  (schema/pred non-empty-string? 'non-empty-string?))
+
+(defn non-negative-integer?
+  [i]
+  (and (integer? i)
+       (<= 0 i)))
+
+(def NonNegInt
+  "Any integer z in Z where z >= 0."
+  (schema/pred non-negative-integer? 'non-negative-integer?))
+
+(defn positive-integer?
+  [i]
+  (and (integer? i)
+       (pos? i)))
+
+(def PosInt
+  "Any integer z in Z where z > 0."
+  (schema/pred positive-integer? 'positive-integer?))
+
+(defn posint-string? [s]
+  (and (string? s)
+       (try (pos? (Integer/parseInt s))
+            (catch Exception _ false))))
+
+(def PosIntStr
+  "Any integer z in Z where z > 0, as a string."
+  (schema/pred posint-string? 'posint-string?))
+
+(def ^:private alpha-numeric-regex #"[a-zA-Z0-9]+")
+
+(defn string-matches-regex? [regex s]
+  (boolean (and (string? s)
+                (re-matches regex s))))
+
+(defn alpha-numeric-string? [s]
+  (string-matches-regex? alpha-numeric-regex s))
+
+(def AlphaNumericStr
+  "Any string containing only letters or digits."
+  (schema/pred alpha-numeric-string? 'alpha-numeric-string?))
