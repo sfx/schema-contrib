@@ -1,4 +1,4 @@
-(defproject schema-contrib "0.1.6-SNAPSHOT"
+(defproject schema-contrib "0.1.5"
   :description "Additional validators for Prismatic's Schema."
   :url "https://github.com/sfx/schema-contrib"
   :license {:name "Eclipse Public License"
