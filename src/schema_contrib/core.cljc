@@ -1,14 +1,16 @@
 (ns schema-contrib.core
-  (:import [java.util Locale])
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
+  (:require [clojure.string :as string]
             [instaparse.core :as instaparse]
-            [schema.core :as schema]))
+            [schema.core :as schema]
+            [schema-contrib.data :as data])
+  #?(:cljs (:require-macros [schema-contrib.resources :as load])
+     :clj
+           (:require [schema-contrib.resources :as load])))
 
 ;; Country (ISO 3166-1 alpha-2 country codes)
 
 (def countries
-  (apply hash-set (Locale/getISOCountries)))
+  (apply hash-set data/countries))
 
 (defn countries-contains?
   [c]
@@ -18,7 +20,7 @@
   (schema/pred countries-contains? 'Country))
 
 (def countries-keywords
-  (->> (Locale/getISOCountries)
+  (->> data/countries
        (map keyword)
        (apply hash-set)))
 
@@ -38,7 +40,7 @@
 
 (def date-parser
   (instaparse/parser
-    (io/resource "date.abnf")
+    (load/load-resource "date.abnf")
     :input-format :abnf))
 
 (defn date?
@@ -75,7 +77,7 @@
 
 (def email-parser
   (instaparse/parser
-    (io/resource "email.abnf")
+    (load/load-resource "email.abnf")
     :input-format :abnf))
 
 (defn email?
@@ -91,7 +93,7 @@
 ;; Language
 
 (def languages
-  (apply hash-set (Locale/getISOLanguages)))
+  (apply hash-set data/languages))
 
 (defn languages-contains?
   [l]
@@ -101,7 +103,7 @@
   (schema/pred languages-contains? 'Language))
 
 (def languages-keywords
-  (->> (Locale/getISOLanguages)
+  (->> data/languages
        (map keyword)
        (apply hash-set)))
 
@@ -123,7 +125,7 @@
 
 (def uri-parser
   (instaparse/parser
-    (io/resource "uri.abnf")
+    (load/load-resource "uri.abnf")
     :input-format :abnf))
 
 (defn uri?
