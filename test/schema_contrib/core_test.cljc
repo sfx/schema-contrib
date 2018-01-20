@@ -1,17 +1,23 @@
 (ns schema-contrib.core-test
-  (:import (clojure.lang ExceptionInfo))
   (:require [clojure.string :as string]
-            [clojure.test :refer :all]
             [clojure.test.check.generators :as gen]
             [schema.core :as schema]
-            [schema-contrib.core :refer :all]
+            [clojure.test :refer [deftest is testing]]
+            [schema-contrib.core :refer [Country
+                                         Country-Keyword
+                                         Date
+                                         Email
+                                         Language-Keyword
+                                         Language
+                                         ISO-Date-Time
+                                         Time
+                                         URI
+                                         URI-Reference]]
             [schema-contrib.gen :as scgen]))
 
 (defn valid
   [s v]
-  (try
-    (= (schema/validate s v) v)
-    (catch ExceptionInfo e false)))
+  (= nil (schema/check s v)))
 
 (defn invalid
   [s v]
